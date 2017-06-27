@@ -1,7 +1,7 @@
 
 void potential_exit(int);
 
-void foo() {
+void test() {
   int i = 100;
   int a = 0;
 

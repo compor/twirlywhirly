@@ -4,7 +4,7 @@
 
 jmp_buf jump_buffer;
 
-void foo(int count) {
+void test(int count) {
   longjmp(jump_buffer, count + 1);
 }
 
@@ -16,7 +16,7 @@ int main() {
     count = 0;
     i++;
     if (setjmp(jump_buffer) != 9) {
-      foo(count++); // setjump() will return count+1
+      test(count++); // setjump() will return count+1
     }
   }
 

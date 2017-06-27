@@ -1,5 +1,5 @@
 
-void foo() {
+void test() {
   int i = 100;
   int j = 100;
   int a = 0;

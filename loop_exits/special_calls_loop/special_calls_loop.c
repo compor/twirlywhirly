@@ -1,12 +1,12 @@
 
-void foo(void);
+void test(void);
 void bar(void);
 
 void test(void) {
   int i = 100;
 
   while (--i) {
-    foo();
+    test();
     bar();
   }
 }

@@ -1,7 +1,7 @@
 
 void exit(int);
 
-void foo() {
+void test() {
   exit(1);
 }
 
@@ -13,7 +13,7 @@ void test() {
     a++;
 
     if(a == 50)
-      foo();
+      test();
 
     a++;
   }
