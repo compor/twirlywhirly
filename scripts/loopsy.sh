@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
 
-fname=$(basename $1)
-suffix=${fname##*\.}
-prefix=${fname%%\.*}
+if [ -z "$1" ]; then 
+  echo "error: source bitcode file was not provided" 
 
+  exit 1
+fi
 
-clang -c -emit-llvm ${fname}
+INPUT_FILE=$1
 
-outfile="${prefix}-canon.bc"
-opt -loop-simplify "${prefix}.bc" -o ${outfile}
+#
 
-llvm-dis ${outfile} 
+FNAME=$(basename $INPUT_FILE)
+SUFFIX=${FNAME##*\.}
+PREFIX=${FNAME%%\.*}
+OUTPUT_FILE="${PREFIX}-canon.bc"
 
-exit 0
+clang -c -emit-llvm ${INPUT_FILE} && \
+opt -loop-simplify "${PREFIX}.bc" -o ${OUTPUT_FILE} && \
+llvm-dis ${OUTPUT_FILE} 
+
+exit $?
 
