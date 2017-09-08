@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.0)
 project(twirlywhirly C)
 
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake//")
+
 find_package(LLVM REQUIRED CONFIG)
 
 if(LLVM_FOUND)
