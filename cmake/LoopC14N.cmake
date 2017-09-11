@@ -12,24 +12,27 @@ endmacro()
 function(LoopC14NPipeline)
   LoopC14NPipelineSetupNames()
 
-  set(options)
+  set(options ALL)
   set(oneValueArgs DEPENDS)
   set(multiValueArgs)
   cmake_parse_arguments(${PIPELINE_NAME_UPPER}
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  if("${${PIPELINE_NAME_UPPER}_DEPENDS}" STREQUAL "")
+  if(${${PIPELINE_NAME_UPPER}_DEPENDS})
     set(BW_COMPATIBILITY TRUE)
   endif()
 
   set(TRGT ${${PIPELINE_NAME_UPPER}_DEPENDS})
+  if(${PIPELINE_NAME_UPPER}_ALL)
+    set(ALL_OPTION "ALL")
+  endif()
 
   # apply defaults
   if(BW_COMPATIBILITY)
     list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 TRGT)
     list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
 
-    if("${TRGT}" STREQUAL "")
+    if(TRGT)
       message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
     endif()
   endif()
@@ -45,7 +48,7 @@ function(LoopC14NPipeline)
   endif()
 
   if(NOT TARGET ${PIPELINE_NAME})
-    add_custom_target(${PIPELINE_NAME})
+    add_custom_target(${PIPELINE_NAME} ${ALL_OPTION})
   endif()
 
   set(PIPELINE_SUBTARGET "${PIPELINE_NAME}_${TRGT}")
@@ -72,12 +75,74 @@ function(LoopC14NPipeline)
   target_link_libraries(${PIPELINE_PREFIX}_bc_exe m)
 
   ## pipeline aggregate targets
-  add_custom_target(${PIPELINE_SUBTARGET} DEPENDS
+  add_custom_target(${PIPELINE_SUBTARGET} ${ALL_OPTION} DEPENDS
     ${PIPELINE_PREFIX}_bc
     ${PIPELINE_PREFIX}_opt
     ${PIPELINE_PREFIX}_link
     ${PIPELINE_PREFIX}_bc_exe)
 
   add_dependencies(${PIPELINE_NAME} ${PIPELINE_SUBTARGET})
+
+  InstallLoopC14NLLVMIRPipeline(DEPENDS ${PIPELINE_PREFIX}_link DESTINATION .)
 endfunction()
+
+
+function(InstallLoopC14NLLVMIRPipeline)
+  LoopC14NPipelineSetupNames()
+
+  set(options)
+  set(oneValueArgs DEPENDS DESTINATION)
+  set(multiValueArgs)
+  cmake_parse_arguments(${PIPELINE_NAME_UPPER}
+    "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  set(TRGT ${${PIPELINE_NAME_UPPER}_DEPENDS})
+  set(DEST_DIR ${${PIPELINE_NAME_UPPER}_DESTINATION})
+
+  if(NOT ${PIPELINE_NAME_UPPER}_DEPENDS AND NOT
+      ${PIPELINE_NAME_UPPER}_DESTINATION)
+    set(BW_COMPATIBILITY TRUE)
+  endif()
+
+  if(BW_COMPATIBILITY)
+    list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 TRGT)
+    list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
+
+    if(TRGT)
+      message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
+    endif()
+
+    list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 DEST_DIR)
+    list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
+
+    if(DEST_DIR)
+      message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DESTINATION")
+    endif()
+  endif()
+
+  if(NOT TARGET ${PIPELINE_INSTALL_TARGET})
+    add_custom_target(${PIPELINE_INSTALL_TARGET})
+  endif()
+
+  if(NOT IS_ABSOLUTE ${DEST_DIR})
+    set(DEST_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DIR})
+  endif()
+
+  get_property(LLVMIR_DIR TARGET ${TRGT} PROPERTY LLVMIR_DIR)
+
+  ## strip trailing slashes
+  #string(REGEX REPLACE "(.*[^/]+)(//*)$" "\\1" llvmir_stripped_dir ${llvmir_dir})
+  #get_filename_component(llvmir_part_dir ${llvmir_stripped_dir} NAME)
+  file(TO_NATIVE_PATH ${LLVMIR_DIR} LLVMIR_NDIR)
+  file(TO_NATIVE_PATH ${DEST_DIR} DEST_NDIR)
+
+  set(PIPELINE_PART_INSTALL_TARGET "${TRGT}-install")
+
+  add_custom_target(${PIPELINE_PART_INSTALL_TARGET}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${LLVMIR_DIR} ${DEST_NDIR})
+
+  add_dependencies(${PIPELINE_PART_INSTALL_TARGET} ${TRGT})
+  add_dependencies(${PIPELINE_INSTALL_TARGET} ${PIPELINE_PART_INSTALL_TARGET})
+endfunction()
+
 
