@@ -5,6 +5,7 @@ if(NOT LLVM_FOUND)
 endif()
 
 include(LoopC14N)
+include(MemProfiler)
 
 add_subdirectory(positive)
 add_subdirectory(negative)

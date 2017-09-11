@@ -8,37 +8,31 @@ macro(LoopC14NPipelineSetupNames)
   set(PIPELINE_INSTALL_TARGET "${PIPELINE_NAME}-install")
 endmacro()
 
-
 function(LoopC14NPipeline)
   LoopC14NPipelineSetupNames()
 
   set(options ALL)
-  set(oneValueArgs DEPENDS)
+  set(oneValueArgs NAME DEPENDS)
   set(multiValueArgs)
   cmake_parse_arguments(${PIPELINE_NAME_UPPER}
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  if(${${PIPELINE_NAME_UPPER}_DEPENDS})
-    set(BW_COMPATIBILITY TRUE)
+  set(TRGT ${${PIPELINE_NAME_UPPER}_DEPENDS})
+  set(NAME ${${PIPELINE_NAME_UPPER}_NAME})
+
+  if(NOT TRGT)
+    message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
   endif()
 
-  set(TRGT ${${PIPELINE_NAME_UPPER}_DEPENDS})
+  if(NOT NAME)
+    message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing NAME option")
+  endif()
+
   if(${PIPELINE_NAME_UPPER}_ALL)
     set(ALL_OPTION "ALL")
   endif()
 
-  # apply defaults
-  if(BW_COMPATIBILITY)
-    list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 TRGT)
-    list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
-
-    if(TRGT)
-      message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
-    endif()
-  endif()
-
-  list(LENGTH ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS UNPARSED_ARGS_LEN)
-  if(${UNPARSED_ARGS_LEN} GREATER 0)
+  if(${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: has extraneous arguments \
     ${${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS}")
   endif()
@@ -51,7 +45,7 @@ function(LoopC14NPipeline)
     add_custom_target(${PIPELINE_NAME} ${ALL_OPTION})
   endif()
 
-  set(PIPELINE_SUBTARGET "${PIPELINE_NAME}_${TRGT}")
+  set(PIPELINE_SUBTARGET "${PIPELINE_NAME}_${NAME}")
   set(PIPELINE_PREFIX ${PIPELINE_SUBTARGET})
 
   ## pipeline targets and chaining
@@ -99,25 +93,12 @@ function(InstallLoopC14NLLVMIRPipeline)
   set(TRGT ${${PIPELINE_NAME_UPPER}_DEPENDS})
   set(DEST_DIR ${${PIPELINE_NAME_UPPER}_DESTINATION})
 
-  if(NOT ${PIPELINE_NAME_UPPER}_DEPENDS AND NOT
-      ${PIPELINE_NAME_UPPER}_DESTINATION)
-    set(BW_COMPATIBILITY TRUE)
+  if(NOT TRGT)
+    message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
   endif()
 
-  if(BW_COMPATIBILITY)
-    list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 TRGT)
-    list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
-
-    if(TRGT)
-      message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DEPENDS target")
-    endif()
-
-    list(GET ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0 DEST_DIR)
-    list(REMOVE_AT ${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS 0)
-
-    if(DEST_DIR)
-      message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DESTINATION")
-    endif()
+  if(NOT DEST_DIR)
+    message(FATAL_ERROR "pipeline ${PIPELINE_NAME}: missing DESTINATION")
   endif()
 
   if(NOT TARGET ${PIPELINE_INSTALL_TARGET})
@@ -130,9 +111,6 @@ function(InstallLoopC14NLLVMIRPipeline)
 
   get_property(LLVMIR_DIR TARGET ${TRGT} PROPERTY LLVMIR_DIR)
 
-  ## strip trailing slashes
-  #string(REGEX REPLACE "(.*[^/]+)(//*)$" "\\1" llvmir_stripped_dir ${llvmir_dir})
-  #get_filename_component(llvmir_part_dir ${llvmir_stripped_dir} NAME)
   file(TO_NATIVE_PATH ${LLVMIR_DIR} LLVMIR_NDIR)
   file(TO_NATIVE_PATH ${DEST_DIR} DEST_NDIR)
 
@@ -144,5 +122,4 @@ function(InstallLoopC14NLLVMIRPipeline)
   add_dependencies(${PIPELINE_PART_INSTALL_TARGET} ${TRGT})
   add_dependencies(${PIPELINE_INSTALL_TARGET} ${PIPELINE_PART_INSTALL_TARGET})
 endfunction()
-
 
