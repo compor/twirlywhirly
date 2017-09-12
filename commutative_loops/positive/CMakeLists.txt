@@ -9,3 +9,8 @@ LoopC14NPipeline(NAME simple_map DEPENDS simple_map)
 TerracePipeline(NAME simple_map DEPENDS LoopC14N_simple_map_link)
 MemProfilerPipeline(NAME simple_map DEPENDS Terrace_simple_map_link)
 
+
+# installation
+
+install(TARGETS MemProfiler_simple_map_bc_exe RUNTIME DESTINATION .)
+
