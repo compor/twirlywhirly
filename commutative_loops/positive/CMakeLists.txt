@@ -12,5 +12,6 @@ MemProfilerPipeline(NAME simple_map DEPENDS Terrace_simple_map_link)
 
 # installation
 
-install(TARGETS MemProfiler_simple_map_bc_exe RUNTIME DESTINATION .)
+install(TARGETS MemProfiler_simple_map_bc_exe 
+  RUNTIME DESTINATION simple_map)
 

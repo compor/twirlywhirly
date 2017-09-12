@@ -12,5 +12,6 @@ MemProfilerPipeline(NAME cross_iteration_deps DEPENDS Terrace_cross_iteration_de
 
 # installation
 
-install(TARGETS MemProfiler_cross_iteration_deps_bc_exe RUNTIME DESTINATION .)
+install(TARGETS MemProfiler_cross_iteration_deps_bc_exe 
+  RUNTIME DESTINATION cross_iteration_deps)
 
