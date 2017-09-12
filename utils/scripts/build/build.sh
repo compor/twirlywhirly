@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
 
-# initialize configuration vars
-
-SRC_DIR=""
-INSTALL_DIR=""
-
-
 # set configuration vars
 
-if [[ -z $1 ]]; then 
-  echo "error: source directory was not provided" && exit 1
-fi
+[[ -z $1 ]] && echo "error: source directory was not provided" && exit 1
 
 SRC_DIR=$1
-INSTALL_DIR=${2:-/../install/}
+INSTALL_DIR=${2:-../install/}
 
 # print configuration vars
 

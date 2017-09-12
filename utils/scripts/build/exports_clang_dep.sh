@@ -22,6 +22,7 @@ export CommutativityRuntime_DIR
 CMAKE_OPTIONS="-DTerrace_DIR=${Terrace_DIR}"
 CMAKE_OPTIONS="${CMAKE_OPTIONS} -DMemProfiler_DIR=${MemProfiler_DIR}"
 CMAKE_OPTIONS="${CMAKE_OPTIONS} -DCommutativityRuntime_DIR=${CommutativityRuntime_DIR}"
+CMAKE_OPTIONS="${CMAKE_OPTIONS} -DCMAKE_INSTALL_RPATH=$(${LLVMCONFIG} --libdir)"
 
 export CMAKE_OPTIONS
 
