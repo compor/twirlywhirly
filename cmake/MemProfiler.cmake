@@ -20,6 +20,12 @@ macro(MemProfilerPipelineSetup)
   endif()
 
   get_target_property(MEMPROFILER_LIB_LOCATION LLVMMemProfilerPass LOCATION)
+
+  find_package(CommutativityRuntime CONFIG)
+
+  if(NOT CommutativityRuntime_FOUND)
+    message(FATAL_ERROR "package CommutativityRuntime was not found")
+  endif()
 endmacro()
 
 MemProfilerPipelineSetup()
@@ -78,7 +84,7 @@ function(MemProfilerPipeline)
   llvmir_attach_executable(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_link)
   add_dependencies(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_link)
 
-  target_link_libraries(${PIPELINE_PREFIX}_bc_exe m)
+  target_link_libraries(${PIPELINE_PREFIX}_bc_exe CommutativityRuntime m)
 
   ## pipeline aggregate targets
   add_custom_target(${PIPELINE_SUBTARGET} DEPENDS
