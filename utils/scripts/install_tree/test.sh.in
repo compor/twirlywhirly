@@ -1,0 +1,11 @@
+
+env
+
+export COMM_DEPTH=0
+export COMM_FILE=comm.${COMM_DEPTH}.map
+export COMM_TEST=1
+export COMM_FAST=1
+export M_MMAP_THRESHOLD=0
+
+./@PROGRAM_NAME@
+
