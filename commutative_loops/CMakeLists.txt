@@ -11,3 +11,9 @@ include(MemProfiler)
 add_subdirectory(positive)
 add_subdirectory(negative)
 
+
+# installation
+
+install(PROGRAMS "${CMAKE_SOURCE_DIR}/utils/scripts/install_tree/prepare_env.sh"
+  DESTINATION "scripts")
+
