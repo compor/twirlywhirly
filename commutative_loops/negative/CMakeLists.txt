@@ -1,25 +1,27 @@
 # cmake file
 
-add_executable(cross_iteration_deps
-  cross_iteration_deps.c)
+set(EXAMPLE_NAME "cross_iteration_deps")
 
-set_target_properties(cross_iteration_deps PROPERTIES LINKER_LANGUAGE C)
+add_executable(${EXAMPLE_NAME}
+  ${EXAMPLE_NAME}.c)
 
-LoopC14NPipeline(NAME cross_iteration_deps DEPENDS cross_iteration_deps)
-TerracePipeline(NAME cross_iteration_deps DEPENDS LoopC14N_cross_iteration_deps_link)
-MemProfilerPipeline(NAME cross_iteration_deps DEPENDS Terrace_cross_iteration_deps_link)
+set_target_properties(${EXAMPLE_NAME} PROPERTIES LINKER_LANGUAGE C)
+
+LoopC14NPipeline(NAME ${EXAMPLE_NAME} DEPENDS ${EXAMPLE_NAME})
+TerracePipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
+MemProfilerPipeline(NAME ${EXAMPLE_NAME} DEPENDS Terrace_${EXAMPLE_NAME}_link)
 
 get_target_property(OUTDIR 
-  MemProfiler_cross_iteration_deps_bc_exe RUNTIME_OUTPUT_DIRECTORY)
+  MemProfiler_${EXAMPLE_NAME}_bc_exe RUNTIME_OUTPUT_DIRECTORY)
 
-copy_rt_scripts(PROGRAM_NAME MemProfiler_cross_iteration_deps_bc_exe 
+copy_rt_scripts(PROGRAM_NAME MemProfiler_${EXAMPLE_NAME}_bc_exe 
   DESTINATION "${OUTDIR}/scripts")
 
 # installation
 
-install(TARGETS MemProfiler_cross_iteration_deps_bc_exe 
-  RUNTIME DESTINATION "cross_iteration_deps")
+install(TARGETS MemProfiler_${EXAMPLE_NAME}_bc_exe 
+  RUNTIME DESTINATION "${EXAMPLE_NAME}")
 
 install(DIRECTORY "${OUTDIR}/scripts/" 
-  DESTINATION "cross_iteration_deps" USE_SOURCE_PERMISSIONS)
+  DESTINATION "${EXAMPLE_NAME}" USE_SOURCE_PERMISSIONS)
 
