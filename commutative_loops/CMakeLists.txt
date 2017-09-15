@@ -17,3 +17,7 @@ add_subdirectory(cross_iteration_deps)
 install(PROGRAMS "${CMAKE_SOURCE_DIR}/utils/scripts/install_tree/prepare_env.sh"
   DESTINATION "scripts")
 
+install(PROGRAMS
+  "${CMAKE_SOURCE_DIR}/utils/scripts/install_tree/check_commutativity.sh"
+  DESTINATION "scripts")
+

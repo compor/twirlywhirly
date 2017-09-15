@@ -23,6 +23,9 @@ copy_rt_scripts(PROGRAM_NAME MemProfiler_${EXAMPLE_NAME}_bc_exe
 install(TARGETS MemProfiler_${EXAMPLE_NAME}_bc_exe 
   RUNTIME DESTINATION "${EXAMPLE_NAME}")
 
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/expected.txt" 
+  DESTINATION "${EXAMPLE_NAME}")
+
 install(DIRECTORY "${OUTDIR}/scripts/" 
   DESTINATION "${EXAMPLE_NAME}" USE_SOURCE_PERMISSIONS)
 
