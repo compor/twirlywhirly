@@ -13,6 +13,7 @@ add_subdirectory(map_saxpy)
 add_subdirectory(reduce_add)
 add_subdirectory(map_reduce_dot_product)
 add_subdirectory(scan_add)
+add_subdirectory(stencil_simple)
 add_subdirectory(cross_iteration_deps)
 add_subdirectory(cross_iteration_deps_fake)
 
