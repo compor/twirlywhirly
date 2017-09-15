@@ -14,6 +14,7 @@ add_subdirectory(reduce_add)
 add_subdirectory(map_reduce_dot_product)
 add_subdirectory(scan_add)
 add_subdirectory(cross_iteration_deps)
+add_subdirectory(cross_iteration_deps_fake)
 
 
 # installation
