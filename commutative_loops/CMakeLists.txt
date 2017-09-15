@@ -8,7 +8,8 @@ include(LoopC14N)
 include(Terrace)
 include(MemProfiler)
 
-add_subdirectory(simple_map)
+add_subdirectory(map_simple)
+add_subdirectory(reduce_add)
 add_subdirectory(cross_iteration_deps)
 
 

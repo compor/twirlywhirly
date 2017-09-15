@@ -1,6 +1,6 @@
 # cmake file
 
-set(EXAMPLE_NAME "simple_map")
+set(EXAMPLE_NAME "reduce_add")
 
 add_executable(${EXAMPLE_NAME}
   ${EXAMPLE_NAME}.c)
