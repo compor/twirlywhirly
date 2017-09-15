@@ -1,6 +1,6 @@
 # cmake file
 
-set(EXAMPLE_NAME "cross_iteration_deps")
+set(EXAMPLE_NAME "simple_map")
 
 add_executable(${EXAMPLE_NAME}
   ${EXAMPLE_NAME}.c)
@@ -16,6 +16,7 @@ get_target_property(OUTDIR
 
 copy_rt_scripts(PROGRAM_NAME MemProfiler_${EXAMPLE_NAME}_bc_exe 
   DESTINATION "${OUTDIR}/scripts")
+
 
 # installation
 

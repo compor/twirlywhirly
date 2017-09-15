@@ -8,8 +8,8 @@ include(LoopC14N)
 include(Terrace)
 include(MemProfiler)
 
-add_subdirectory(positive)
-add_subdirectory(negative)
+add_subdirectory(simple_map)
+add_subdirectory(cross_iteration_deps)
 
 
 # installation
