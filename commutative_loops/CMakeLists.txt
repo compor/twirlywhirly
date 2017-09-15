@@ -21,3 +21,7 @@ install(PROGRAMS
   "${CMAKE_SOURCE_DIR}/utils/scripts/install_tree/check_commutativity.sh"
   DESTINATION "scripts")
 
+install(PROGRAMS
+  "${CMAKE_SOURCE_DIR}/utils/scripts/install_tree/run_commutativity.sh"
+  DESTINATION "scripts")
+
