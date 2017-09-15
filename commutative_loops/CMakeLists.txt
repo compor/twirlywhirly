@@ -9,6 +9,7 @@ include(Terrace)
 include(MemProfiler)
 
 add_subdirectory(map_simple)
+add_subdirectory(map_saxpy)
 add_subdirectory(reduce_add)
 add_subdirectory(scan_add)
 add_subdirectory(cross_iteration_deps)
