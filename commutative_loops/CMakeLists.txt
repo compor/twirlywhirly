@@ -10,6 +10,7 @@ include(MemProfiler)
 
 add_subdirectory(map_simple)
 add_subdirectory(map_saxpy)
+add_subdirectory(map_mandelbrot)
 add_subdirectory(reduce_add)
 add_subdirectory(reduce_histogram)
 add_subdirectory(reduce_concat)
