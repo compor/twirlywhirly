@@ -20,6 +20,7 @@ add_subdirectory(scan_add)
 add_subdirectory(stencil_simple)
 add_subdirectory(list_traversal_update)
 add_subdirectory(linear_search)
+add_subdirectory(binary_search)
 add_subdirectory(cross_iteration_deps)
 add_subdirectory(cross_iteration_deps_fake)
 

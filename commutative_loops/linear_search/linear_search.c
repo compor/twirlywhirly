@@ -5,14 +5,14 @@
 int main() {
   unsigned array[] = {3, 5, 15, 99, 11, 33, 5, 67};
   const size_t N = sizeof(array) / sizeof(unsigned int);
+  unsigned T = 33;
   size_t i;
-  unsigned v = 33;
 
   for (i = 0; i < N; ++i)
-    if (array[i] == v)
+    if (array[i] == T)
       break;
 
-  fprintf(stderr, "%u\n", v);
+  fprintf(stderr, "%zu\n", i);
   fprintf(stderr, "%u\n", array[N / 2]);
 
   return 0;
