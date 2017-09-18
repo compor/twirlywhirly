@@ -18,6 +18,7 @@ add_subdirectory(map_reduce_dot_product)
 add_subdirectory(matrix_product)
 add_subdirectory(scan_add)
 add_subdirectory(stencil_simple)
+add_subdirectory(list_traversal_update)
 add_subdirectory(cross_iteration_deps)
 add_subdirectory(cross_iteration_deps_fake)
 
