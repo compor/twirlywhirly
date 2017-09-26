@@ -3,7 +3,7 @@
 #include <stddef.h>
 
 int main() {
-  unsigned int array[] = {0};
+  unsigned int array[8] = {0};
   const size_t N = sizeof(array) / sizeof(unsigned int);
 
   for (size_t i = 1; i < N; ++i)
