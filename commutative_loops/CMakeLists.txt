@@ -5,6 +5,7 @@ if(NOT LLVM_FOUND)
 endif()
 
 include(LoopC14N)
+include(DecoupleLoopsFront)
 include(Terrace)
 include(MemProfiler)
 
