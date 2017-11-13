@@ -8,11 +8,21 @@ int main() {
   const size_t N = sizeof(array) / sizeof(char *);
   const size_t n = strlen(array[0]);
   char acc[N * 2 + 1] = {0};
+  char *result = acc;
+  size_t i = 0;
 
-  for (size_t i = 0; i < N; ++i)
-    strncpy(acc + i * n, array[i], n);
+  for (i = 0; i < N; ++i) {
+    fprintf(stderr, "%zu\n", i);
+    strncat(result, array[i], n);
+  }
 
-  fprintf(stderr, "%s\n", acc);
+  /* this does not work because the use of output stmts is not checked */
+  fprintf(stderr, "%s\n", result);
+
+  /* this causes a crash */
+  /*fprintf(stderr, "%zu\n", i);*/
+
+  fprintf(stderr, "%c\n", acc[2]);
 
   return 0;
 }
