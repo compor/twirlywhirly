@@ -26,3 +26,5 @@ set(CMAKE_INSTALL_MESSAGE "LAZY")
 
 add_subdirectory(commutative_loops)
 
+add_subdirectory(utils/stack_heap_printer)
+
