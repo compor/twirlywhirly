@@ -8,6 +8,16 @@ macro(LoopC14NPipelineSetupNames)
   set(PIPELINE_INSTALL_TARGET "${PIPELINE_NAME}-install")
 endmacro()
 
+macro(LoopC14NPipelineSetup)
+  LoopC14NPipelineSetupNames()
+
+  message(STATUS "setting up pipeline ${PIPELINE_NAME}")
+endmacro()
+
+LoopC14NPipelineSetup()
+
+#
+
 function(LoopC14NPipeline)
   LoopC14NPipelineSetupNames()
 

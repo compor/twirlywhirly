@@ -12,8 +12,11 @@ macro(DecoupleLoopsFrontPipelineSetup)
   message(STATUS "setting up pipeline DecoupleLoopsFront")
 
   if(NOT DEFINED ENV{HARNESS_REPORT_DIR})
-    message(FATAL_ERROR
-      "${PIPELINE_NAME} env variable HARNESS_REPORT_DIR is not defined")
+    message(WARNING
+      "${PIPELINE_NAME} env variable HARNESS_REPORT_DIR is not defined. \
+      Using ${CMAKE_BINARY_DIR}/reports/")
+
+      set(ENV{HARNESS_REPORT_DIR} "${CMAKE_BINARY_DIR}/reports/")
   endif()
 
   file(TO_CMAKE_PATH $ENV{HARNESS_REPORT_DIR} HARNESS_REPORT_DIR)
@@ -26,9 +29,16 @@ macro(DecoupleLoopsFrontPipelineSetup)
 
   #
 
-  find_package(DecoupleLoopsFront CONFIG)
+  find_package(DecoupleLoopsFront CONFIG REQUIRED)
 
   get_target_property(DLF_LIB_LOCATION LLVMDecoupleLoopsFrontPass LOCATION)
+
+  set(PREAMBLE_SCRIPT "preamble.sh")
+  set(PREAMBLE_SCRIPT_INPUT "${CMAKE_SOURCE_DIR}/scripts/preamble/${PREAMBLE_SCRIPT}.in")
+
+  if(EXISTS ${PREAMBLE_SCRIPT_INPUT})
+    configure_file(${PREAMBLE_SCRIPT_INPUT} "preamble/${PIPELINE_NAME}_${PREAMBLE_SCRIPT}" @ONLY)
+  endif()
 endmacro()
 
 DecoupleLoopsFrontPipelineSetup()
