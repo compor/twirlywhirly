@@ -7,10 +7,11 @@ int main() {
   const size_t N = sizeof(array) / sizeof(unsigned int);
   unsigned T = 33;
   size_t i;
+  int found = 0;
 
-  for (i = 0; i < N; ++i)
+  for (i = 0; !found && i < N; ++i)
     if (array[i] == T)
-      break;
+      found = 1;
 
   fprintf(stderr, "%zu\n", i);
   fprintf(stderr, "%u\n", array[N / 2]);

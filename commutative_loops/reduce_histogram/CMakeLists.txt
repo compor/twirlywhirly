@@ -8,6 +8,7 @@ add_executable(${EXAMPLE_NAME}
 set_target_properties(${EXAMPLE_NAME} PROPERTIES LINKER_LANGUAGE C)
 
 LoopC14NPipeline(NAME ${EXAMPLE_NAME} DEPENDS ${EXAMPLE_NAME})
+DecoupleLoopsFrontPipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
 TerracePipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
 MemProfilerPipeline(NAME ${EXAMPLE_NAME} DEPENDS Terrace_${EXAMPLE_NAME}_link)
 
