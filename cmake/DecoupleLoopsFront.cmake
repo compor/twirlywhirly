@@ -92,13 +92,14 @@ function(DecoupleLoopsFrontPipeline)
   file(TO_CMAKE_PATH ${REPORT_DIR}/${BMK_NAME} REPORT_DIR)
   file(MAKE_DIRECTORY ${REPORT_DIR})
 
-  llvmir_attach_opt_pass_target(${PIPELINE_PREFIX}_le
-    ${DEPENDEE_TRGT}
-    -loop-extract)
-  add_dependencies(${PIPELINE_PREFIX}_le ${DEPENDEE_TRGT})
+  #llvmir_attach_opt_pass_target(${PIPELINE_PREFIX}_le
+    #${DEPENDEE_TRGT}
+    #-loop-extract)
+  #add_dependencies(${PIPELINE_PREFIX}_le ${DEPENDEE_TRGT})
 
   llvmir_attach_opt_pass_target(${PIPELINE_PREFIX}_dlf
-    ${PIPELINE_PREFIX}_le
+    #${PIPELINE_PREFIX}_le
+    ${DEPENDEE_TRGT}
     -load ${DLF_LIB_LOCATION}
     -decouple-loops-front
     -dlf-debug
@@ -108,7 +109,8 @@ function(DecoupleLoopsFrontPipeline)
     -dlf-report ${HARNESS_REPORT_DIR}/${BMK_NAME}
     -dlf-dot-cfg-only
     -dlf-dot-dir ${REPORT_DIR})
-  add_dependencies(${PIPELINE_PREFIX}_dlf ${PIPELINE_PREFIX}_le)
+  #add_dependencies(${PIPELINE_PREFIX}_dlf ${PIPELINE_PREFIX}_le)
+  add_dependencies(${PIPELINE_PREFIX}_dlf ${DEPENDEE_TRGT})
 
   llvmir_attach_executable(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_dlf)
   add_dependencies(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_dlf)
@@ -118,7 +120,7 @@ function(DecoupleLoopsFrontPipeline)
   ## pipeline aggregate targets
   add_custom_target(${PIPELINE_SUBTARGET} DEPENDS
     ${DEPENDEE_TRGT}
-    ${PIPELINE_PREFIX}_le
+    #${PIPELINE_PREFIX}_le
     ${PIPELINE_PREFIX}_dlf
     ${PIPELINE_PREFIX}_bc_exe)
 
