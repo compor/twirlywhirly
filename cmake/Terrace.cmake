@@ -72,7 +72,9 @@ function(TerracePipeline)
   llvmir_attach_opt_pass_target(${PIPELINE_PREFIX}_link
     ${DEPENDEE_TRGT}
     -load ${TERRACE_LIB_LOCATION}
-    -terrace)
+    -terrace
+    -terrace-debug
+    -terrace-debug-level=debug)
   add_dependencies(${PIPELINE_PREFIX}_link ${DEPENDEE_TRGT})
 
   llvmir_attach_executable(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_link)
