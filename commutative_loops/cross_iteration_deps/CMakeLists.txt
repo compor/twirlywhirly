@@ -9,7 +9,7 @@ set_target_properties(${EXAMPLE_NAME} PROPERTIES LINKER_LANGUAGE C)
 
 LoopC14NPipeline(NAME ${EXAMPLE_NAME} DEPENDS ${EXAMPLE_NAME})
 DecoupleLoopsFrontPipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
-TerracePipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
+TerracePipeline(NAME ${EXAMPLE_NAME} DEPENDS DecoupleLoopsFront_${EXAMPLE_NAME}_dlf)
 MemProfilerPipeline(NAME ${EXAMPLE_NAME} DEPENDS Terrace_${EXAMPLE_NAME}_link)
 
 get_target_property(OUTDIR 
