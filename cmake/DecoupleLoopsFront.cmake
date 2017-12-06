@@ -103,7 +103,7 @@ function(DecoupleLoopsFrontPipeline)
     -load ${DLF_LIB_LOCATION}
     -decouple-loops-front
     -dlf-debug
-    -dlf-bb-annotate-type
+    -dlf-annotate-type
     -dlf-bb-annotate-weight
     -dlf-bb-prefix-type
     -dlf-report ${HARNESS_REPORT_DIR}/${BMK_NAME}
