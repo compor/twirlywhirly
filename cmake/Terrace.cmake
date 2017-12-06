@@ -73,6 +73,7 @@ function(TerracePipeline)
     ${DEPENDEE_TRGT}
     -load ${TERRACE_LIB_LOCATION}
     -terrace
+    -terrace-extract
     -terrace-debug
     -terrace-debug-level=debug)
   add_dependencies(${PIPELINE_PREFIX}_link ${DEPENDEE_TRGT})
