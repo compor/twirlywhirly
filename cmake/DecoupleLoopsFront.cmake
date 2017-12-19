@@ -29,7 +29,13 @@ macro(DecoupleLoopsFrontPipelineSetup)
 
   #
 
-  find_package(DecoupleLoopsFront CONFIG REQUIRED)
+  find_package(DecoupleLoopsFront CONFIG)
+
+  if(NOT DecoupleLoopsFront_FOUND)
+    message(WARNING "package DecoupleLoopsFront was not found")
+
+    return()
+  endif()
 
   get_target_property(DLF_LIB_LOCATION LLVMDecoupleLoopsFrontPass LOCATION)
 

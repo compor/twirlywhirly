@@ -16,7 +16,9 @@ macro(MemProfilerPipelineSetup)
   find_package(MemProfiler CONFIG)
 
   if(NOT MemProfiler_FOUND)
-    message(FATAL_ERROR "package MemProfiler was not found")
+    message(WARNING "package MemProfiler was not found")
+
+    return()
   endif()
 
   get_target_property(MEMPROFILER_LIB_LOCATION LLVMMemProfilerPass LOCATION)

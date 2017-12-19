@@ -16,7 +16,9 @@ macro(TerracePipelineSetup)
   find_package(Terrace CONFIG)
 
   if(NOT Terrace_FOUND)
-    message(FATAL_ERROR "package Terrace was not found")
+    message(WARNING "package Terrace was not found")
+
+    return()
   endif()
 
   get_target_property(TERRACE_LIB_LOCATION LLVMTerracePass LOCATION)
