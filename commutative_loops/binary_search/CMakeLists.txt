@@ -7,10 +7,23 @@ add_executable(${EXAMPLE_NAME}
 
 set_target_properties(${EXAMPLE_NAME} PROPERTIES LINKER_LANGUAGE C)
 
-LoopC14NPipeline(NAME ${EXAMPLE_NAME} DEPENDS ${EXAMPLE_NAME})
-DecoupleLoopsFrontPipeline(NAME ${EXAMPLE_NAME} DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
-TerracePipeline(NAME ${EXAMPLE_NAME} DEPENDS DecoupleLoopsFront_${EXAMPLE_NAME}_dlf)
-MemProfilerPipeline(NAME ${EXAMPLE_NAME} DEPENDS Terrace_${EXAMPLE_NAME}_link)
+if(COMMAND LoopC14NPipeline)
+  LoopC14NPipeline(NAME ${EXAMPLE_NAME} DEPENDS ${EXAMPLE_NAME})
+endif()
+
+if(COMMAND DecoupleLoopsFrontPipeline)
+  DecoupleLoopsFrontPipeline(NAME ${EXAMPLE_NAME} 
+    DEPENDS LoopC14N_${EXAMPLE_NAME}_link)
+endif()
+
+if(COMMAND TerracePipeline)
+  TerracePipeline(NAME ${EXAMPLE_NAME} 
+    DEPENDS DecoupleLoopsFront_${EXAMPLE_NAME}_dlf)
+endif()
+
+if(COMMAND MemProfilerPipeline)
+  MemProfilerPipeline(NAME ${EXAMPLE_NAME} DEPENDS Terrace_${EXAMPLE_NAME}_link)
+endif()
 
 get_target_property(OUTDIR 
   MemProfiler_${EXAMPLE_NAME}_bc_exe RUNTIME_OUTPUT_DIRECTORY)
