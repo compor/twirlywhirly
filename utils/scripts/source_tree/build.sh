@@ -1,19 +1,10 @@
 #!/usr/bin/env bash
 
-# set configuration vars
-
-[[ -z $1 ]] && echo "error: source directory was not provided" && exit 1
-
-SRC_DIR=$1
+PRJ_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../" && pwd)"
+SRC_DIR=${1:-$PRJ_ROOT_DIR}
 INSTALL_DIR=${2:-../install/}
 
-# print configuration vars
-
-echo "info: printing configuration vars"
-echo "info: source dir: ${SRC_DIR}"
-echo "info: install dir: ${INSTALL_DIR}"
-echo ""
-
+#
 
 cmake \
   -G Ninja \
@@ -26,6 +17,4 @@ cmake \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
   ${CMAKE_OPTIONS} \
   "${SRC_DIR}"
-
-exit $?
 
