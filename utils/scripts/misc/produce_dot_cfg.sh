@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "$1" ]; then 
-  echo "error: source bitcode file was not provided" 
-
-  exit 1
-fi
-
+[[ -z "${1}" ]] && echo "error: source bitcode file was not provided" && exit 1
 INPUT_FILE=$1
 
 #
@@ -16,18 +11,9 @@ PREFIX=${FNAME%%\.*}
 OUTPUT_FILE="${PREFIX}.pdf"
 
 opt -dot-cfg-only -disable-output ${INPUT_FILE}
-RC=$?
+[[ $? -ne 0 ]] && exit 1
 
-if [ $RC -eq 0 ]; then
-  for dotfile in *.dot; do
-    dot -Tpdf ${dotfile} -o ${OUTPUT_FILE}
-    RC=$?
-
-    if [ ${RC} -ne 0 ]; then 
-      break;
-    fi
-  done
-fi
-
-exit $RC
+for dotfile in *.dot; do
+  dot -Tpdf ${dotfile} -o ${OUTPUT_FILE}
+done
 
