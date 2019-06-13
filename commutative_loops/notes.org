@@ -1,0 +1,22 @@
+* which loops are commutative?
+  assumption: all defined values (e.g. all array elements) are live-out
+** loops trivially commutative (trivial iteration space, just reorder iterations):
+*** reduce_add
+*** map_reduce_dot_product
+*** map_simple
+*** linear_search
+*** cross_iteration_deps_fake
+*** map_mandelbrot
+*** map_saxpy
+*** matrix_product
+*** reduce_histogram
+** commutative but non-trivial iteration space:
+*** graph_traversal_update
+*** list_traversal_update
+*** reduce_tree_add
+** non-commutative loops:
+*** binary search
+*** cross_iteration_deps
+*** reduce_concat
+*** stencil_simple
+*** scan_add
