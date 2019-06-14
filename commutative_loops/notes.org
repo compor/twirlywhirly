@@ -2,13 +2,18 @@
   assumption: all defined values (e.g. all array elements) are live-out
 ** loops trivially commutative (trivial iteration space, just reorder iterations):
 *** reduce_add
+**** example available in reduce_add/analysis_example/reduce_add_6.c
 *** map_reduce_dot_product
+**** challenge: multi-dimensional iteration space
 *** map_simple
 *** linear_search
+**** challenge: possible early exit of the loop
 *** cross_iteration_deps_fake
 *** map_mandelbrot
+**** challenge: multi-dimensional iteration space
 *** map_saxpy
 *** matrix_product
+**** challenge: multi-dimensional iteration space
 *** reduce_histogram
 ** commutative but non-trivial iteration space:
 *** graph_traversal_update
@@ -17,6 +22,7 @@
 ** non-commutative loops:
 *** binary search
 *** cross_iteration_deps
+**** example available in cross_iteration_deps/analysis_example/cross_iteration_deps_analysis.c
 *** reduce_concat
 *** stencil_simple
 *** scan_add
