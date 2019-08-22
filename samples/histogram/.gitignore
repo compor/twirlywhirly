@@ -1,0 +1,6 @@
+*.out
+*.polly
+*.comm
+*.bc
+klee-*
+*~
