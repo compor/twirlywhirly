@@ -57,7 +57,7 @@ int main() {
   }
 
   // Save the state.
-  unsigned bucket_size_shadow[NUM_BUCKETS];
+  int bucket_size_shadow[NUM_BUCKETS];
   memcpy(bucket_size_shadow, bucket_size, sizeof(bucket_size));
 
   // Reference loop: i, key_array, shift -> bucket_size.
@@ -66,7 +66,7 @@ int main() {
   }
 
   // Save the output.
-  unsigned int bucket_size_ref[NUM_BUCKETS];
+  int bucket_size_ref[NUM_BUCKETS];
   memcpy(bucket_size_ref, bucket_size, sizeof(bucket_size));
 
   // Restore the state.
@@ -93,7 +93,7 @@ int main() {
   }
 
   // Save the output.
-  unsigned int bucket_size_permuted[NUM_BUCKETS];
+  int bucket_size_permuted[NUM_BUCKETS];
   memcpy(bucket_size_permuted, bucket_size, sizeof(bucket_size));
 
   // Assert that the outputs are the same.
