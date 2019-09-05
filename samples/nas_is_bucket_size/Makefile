@@ -3,10 +3,12 @@ CC_KLEE = clang
 KLEE = klee
 KLEE_INCLUDE_DIR = /home/klee/klee_src/include
 
-nas_is_bucket_size.klee: nas_is_bucket_size.bc
+all: nas_is_bucket_size.klee nas_is_bucket_size_swap.klee
+
+%.klee: %.bc
 	$(KLEE) $<
 
-nas_is_bucket_size.bc: nas_is_bucket_size.c
+%.bc: %.c
 	$(CC_KLEE) -I $(KLEE_INCLUDE_DIR) -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone $<
 
 clean:

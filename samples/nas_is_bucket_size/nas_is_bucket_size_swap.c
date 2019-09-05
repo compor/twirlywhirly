@@ -1,5 +1,6 @@
 // Loop extracted from IS (SNU NPB). Neither ICC nor LLVM+Polly can parallelize
-// this.
+// this. This version permutes the iteration space symbollically with a sequence
+// of individual swaps.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +11,16 @@
 #include "common.h"
 
 int i;
+
+#define SWAP(p, s, t) { typeof(s) tmp = p[s]; p[s] = p[t]; p[t] = tmp; }
+
+// Swaps the values in positions s and t of array p.
+void swap(size_t p[], size_t s, size_t t) {
+  //printf("swap positions %d and %d\n", s, t);
+  size_t tmp = p[s];
+  p[s] = p[t];
+  p[t] = tmp;
+}
 
 // loop_body(i): key_array, shift -> bucket_size.
 void loop_body(int i, int key_array[], int shift, int bucket_size[]) {
@@ -63,16 +74,33 @@ int main() {
   // Introduce permutation array (iteration space between 0 and NUM_KEYS - 1).
   const size_t Np = NUM_KEYS;
   size_t p[Np];
-  // Declare the permutation array as symbolic.
-  klee_make_symbolic(&p, sizeof(p), "p");
-  for (unsigned int i = 0; i < Np; i++) {
-    // Define the domain of the permutation array.
-    klee_assume(p[i] < NUM_KEYS);
-    // Enforce that the array's values indeed form a permutation (they
-    // are pairwise different).
-    for (unsigned int j = i + 1; j < Np; j++) {
-      klee_assume(p[i] != p[j]);
+  for (unsigned int k = 0; k < Np; k++) {
+    p[k] = k;
+  }
+
+  // Permute the array symbolically with a sequence of individual swaps.
+  unsigned int s[MAX_SWAPS], t[MAX_SWAPS];
+
+  klee_make_symbolic(&s, sizeof(s), "s");
+  klee_make_symbolic(&t, sizeof(t), "t");
+
+  for (size_t j = 0; j < MAX_SWAPS; j++) {
+    klee_assume(s[j] >= 0);
+    klee_assume(t[j] >= 0);
+    klee_assume(s[j] < Np);
+    klee_assume(t[j] < Np);
+    klee_assume(s[j] < t[j]);
+  }
+
+  for (size_t i = 0; i < MAX_SWAPS; i++) {
+    for (size_t j = i + 1; j < MAX_SWAPS; j++) {
+      klee_assume(s[i] != s[j]);
+      klee_assume(t[i] != t[j]);
     }
+  }
+
+  for (size_t j = 0; j < MAX_SWAPS; j++) {
+    swap(p, s[j], t[j]);
   }
 
   // Symbolically-permuted loop.
