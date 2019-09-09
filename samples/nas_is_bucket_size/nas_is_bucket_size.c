@@ -32,6 +32,12 @@ int memequal(int *c1, int *c2, size_t len) {
   return equal;
 }
 
+void simple_memcpy(int * dst, int * src, size_t len) {
+  for(size_t i=0; i<len; i++ ) {
+    dst[i] = src[i];
+  }
+}
+
 int main() {
 
   // Induction variable.
@@ -125,6 +131,10 @@ int main() {
   // }
   //
   // Runtimes: 2.8s 3.0s 2.7s 2.9s 2.7s
+  //
+  // Using 'memcpy', on the other hand, does not seem to introduce any
+  // additional overhead. Replacing all calls to 'memcpy' with 'simple_memcpy'
+  // does not give any substantial speedup.
 
   // Exit, as there is no point in continuing the execution.
   exit(EXIT_SUCCESS);
