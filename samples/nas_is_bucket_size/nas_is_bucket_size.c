@@ -21,6 +21,17 @@ void loop_body(int i, int key_array[], int shift, int bucket_size[]) {
   bucket_size[key_array[i] >> shift]++;
 }
 
+int memequal(int *c1, int *c2, size_t len) {
+  int equal = 1;
+  while (len) {
+    equal &= *c1 == *c2;
+    c1++;
+    c2++;
+    len--;
+  }
+  return equal;
+}
+
 int main() {
 
   // Induction variable.
@@ -85,7 +96,35 @@ int main() {
   memcpy(bucket_size_permuted, bucket_size, sizeof(bucket_size));
 
   // Assert that the outputs are the same.
-  assert(memcmp(bucket_size_permuted, bucket_size_ref, sizeof(bucket_size_ref)) == 0);
+  for( i=0; i<NUM_BUCKETS; i++ ) {
+    assert(bucket_size_permuted[i] == bucket_size_ref[i]);
+  }
+
+  // Note that the following alternative:
+  //   assert(memcmp(bucket_size_permuted, bucket_size_ref, sizeof(bucket_size_ref)) == 0);
+  // is more expensive to execute symbolically, see http://mailman.ic.ac.uk/pipermail/klee-dev/2014-July/000755.html
+  //
+  // Here is a rough evaluation of three alternatives (run on Roberto's machine 9/9/2019)
+  //
+  // Alternative (a):
+  //
+  // assert(memcmp(bucket_size_permuted, bucket_size_ref, sizeof(bucket_size_ref)) == 0);
+  //
+  // Runtimes: 4.4s 4.8s 4.6s 4.6s 4.7s
+  //
+  // Alternative (b):
+  //
+  // assert(memequal(bucket_size_permuted, bucket_size_ref, NUM_BUCKETS));
+  //
+  // Runtimes: 4.1s 4.2s 4.1s 4.0s 4.3s
+  //
+  // Alternative (c):
+  //
+  // for( i=0; i<NUM_BUCKETS; i++ ) {
+  //  assert(bucket_size_permuted[i] == bucket_size_ref[i]);
+  // }
+  //
+  // Runtimes: 2.8s 3.0s 2.7s 2.9s 2.7s
 
   // Exit, as there is no point in continuing the execution.
   exit(EXIT_SUCCESS);
