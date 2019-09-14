@@ -26,21 +26,18 @@ void loop_body(int i, int key_array[], int shift, int bucket_size[]) {
   bucket_size[key_array[i] >> shift]++;
 }
 
-void test_permutation(std::vector<unsigned char> p) {
+void test_permutation(unsigned p[N],
+                      int key_array[SIZE_OF_BUFFERS],
+                      int shift,
+                      int bucket_size[NUM_BUCKETS]) {
 
-  // Define input and output.
-
-  // Input. TODO: fill in randomly
-  int key_array[SIZE_OF_BUFFERS];
-  // Input. TODO: concretize randomly
-  int shift;
-  // Input/output. TODO: fill in randomly
-  int bucket_size_ref[NUM_BUCKETS];
-  // Input/output. TODO: fill in randomly
-  int bucket_size_permuted[NUM_BUCKETS];
+  // The array 'bucket_size' is both input and output. Create an instance for
+  // each loop and initialize to the input, random values.
+  int bucket_size_ref[NUM_BUCKETS],
+      bucket_size_permuted[NUM_BUCKETS];
   for( int i=0; i<NUM_BUCKETS; i++ ) {
-    bucket_size_ref[i] = 0;
-    bucket_size_permuted[i] = 0;
+    bucket_size_ref[i] = bucket_size[i];
+    bucket_size_permuted[i] = bucket_size[i];
   }
 
   // Run original loop.
@@ -49,8 +46,8 @@ void test_permutation(std::vector<unsigned char> p) {
   }
 
   // Run commuted loop according to permutation vector p.
-  for (unsigned char k : p) {
-    loop_body(k, key_array, shift, bucket_size_permuted);
+  for (unsigned k=0; k < N; k++) {
+    loop_body(p[k], key_array, shift, bucket_size_permuted);
   }
 
   // Assert that the outputs are the same.
@@ -64,17 +61,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 
   FuzzedDataProvider input(data, size);
 
-  // Permutation array
-  std::vector<unsigned char> p(input.ConsumeBytes<unsigned char>(N));
-  // Input argument
-  //std::vector<unsigned char> a(input.ConsumeRemainingBytes<unsigned char>());
-
-  if (p.size() < N) return 0;
-
-  for (unsigned char i : p) {
-    if (i >= N) return 0;
+  // Define a random permutation array.
+  unsigned p[N];
+  for (unsigned i = 0; i < N; i++) {
+    p[i] = input.ConsumeIntegralInRange(0, N - 1);
   }
-
   for (unsigned int i = 0; i < N; i++) {
     for (unsigned int j = i + 1; j < N; j++) {
       if (p[i] == p[j]) {
@@ -83,13 +74,47 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     }
   }
 
-  printf("permutation (N=%zu): ", p.size());
+  // Define a random instance of the input arguments.
+  int key_array[SIZE_OF_BUFFERS];
+  for (unsigned i = 0; i < SIZE_OF_BUFFERS; i++) {
+    key_array[i] = input.ConsumeIntegralInRange(0, INT_MAX);
+  }
+  int shift;
+  shift = input.ConsumeIntegralInRange(0, INT_MAX);
+  int bucket_size[NUM_BUCKETS];
+  for (unsigned i = 0; i < NUM_BUCKETS; i++) {
+    bucket_size[i] = input.ConsumeIntegralInRange(0, INT_MAX);
+  }
+
+  // Input constraints derived on discarding out-of-bounds UB. If the
+  // constraints are not satisfied, discard input.
+  for (unsigned int i : key_array) {
+    if ((i >> shift) < 0 || (i >> shift) >= NUM_BUCKETS)
+      return 0;
+  }
+
+  // Print input, for debugging purposes.
+  printf("p (size %d): ", N);
   for (unsigned int i : p) {
     printf("%d ", i);
   }
   printf("\n");
 
-  test_permutation(p);
+  printf("key_array (size %d): ", SIZE_OF_BUFFERS);
+  for (unsigned int i : key_array) {
+    printf("%d ", i);
+  }
+  printf("\n");
+
+  printf("shift: %d\n", shift);
+
+  printf("bucket_size (size %d): ", NUM_BUCKETS);
+  for (unsigned int i : bucket_size) {
+    printf("%d ", i);
+  }
+  printf("\n");
+
+  test_permutation(p, key_array, shift, bucket_size);
 
   return 0;
 }

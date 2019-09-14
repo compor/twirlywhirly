@@ -16,7 +16,7 @@ all: nas_is_bucket_size.klee nas_is_bucket_size_swap.klee
 	$(CC) -g -O2 -fsanitize=fuzzer $< -o $@
 
 %.run: %.bin
-	./$< -max-len=4
+	./$<
 
 clean:
 	rm -rf *.bc *.out *.polly *.comm *.yaml *.ll klee-out* klee-last *~
